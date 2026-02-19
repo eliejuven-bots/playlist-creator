@@ -5,9 +5,21 @@ app = Flask(__name__)
 CORS(app)
 
 mock_catalog = [
-    {"id": 1, "title": "Song Alpha", "artist": "Artist X", "mood": "chill", "energy": 0.5},
-    {"id": 2, "title": "Song Beta", "artist": "Artist Y", "mood": "party", "energy": 0.8},
-    {"id": 3, "title": "Song Gamma", "artist": "Artist Z", "mood": "sad", "energy": 0.3}
+    {"id": 1, "title": "Lost in the Echo", "artist": "Linkin Park", "mood": "energetic", "energy": 0.9},
+    {"id": 2, "title": "Blinding Lights", "artist": "The Weeknd", "mood": "upbeat", "energy": 0.85},
+    {"id": 3, "title": "Someone Like You", "artist": "Adele", "mood": "sad", "energy": 0.25},
+    {"id": 4, "title": "Shape of You", "artist": "Ed Sheeran", "mood": "romantic", "energy": 0.6},
+    {"id": 5, "title": "Can’t Stop the Feeling!", "artist": "Justin Timberlake", "mood": "happy", "energy": 0.8},
+    {"id": 6, "title": "Take Five", "artist": "The Dave Brubeck Quartet", "mood": "chill", "energy": 0.4},
+    {"id": 7, "title": "Bad Guy", "artist": "Billie Eilish", "mood": "funky", "energy": 0.7},
+    {"id": 8, "title": "Moonlight Sonata", "artist": "Beethoven", "mood": "melancholic", "energy": 0.15},
+    {"id": 9, "title": "Sandstorm", "artist": "Darude", "mood": "epic", "energy": 1.0},
+    {"id": 10, "title": "Happy", "artist": "Pharrell Williams", "mood": "joyful", "energy": 0.95},
+    {"id": 11, "title": "Africa", "artist": "Toto", "mood": "nostalgic", "energy": 0.6},
+    {"id": 12, "title": "Counting Stars", "artist": "OneRepublic", "mood": "inspirational", "energy": 0.85},
+    {"id": 13, "title": "Smells Like Teen Spirit", "artist": "Nirvana", "mood": "rebellious", "energy": 0.9},
+    {"id": 14, "title": "Believer", "artist": "Imagine Dragons", "mood": "powerful", "energy": 0.8},
+    {"id": 15, "title": "Summertime Sadness", "artist": "Lana Del Rey", "mood": "moody", "energy": 0.4}
 ]
 
 @app.route('/search', methods=['GET'])
@@ -16,7 +28,6 @@ def search_tracks():
 
 @app.route('/generate', methods=['POST'])
 def generate_playlist():
-    # Always returns 50 mock tracks with the same mood as seed
     seed = request.json.get("seed", {})
     mood = seed.get("mood") or "chill"
     energy = seed.get("energy") or 0.5
