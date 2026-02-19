@@ -5,9 +5,9 @@ A web app to create custom playlists with songs from Spotify/Deezer based on vib
 ## Features
 
 - **Browse/Search Music:** Explore and search all available songs
-- **Select Seed Song:** Choose a track as your mood seed (from the built-in mock catalog)
+- **Select Seed Song:** Choose a track as your mood seed (from the built-in mock catalog or real Spotify search)
 - **Playlist Generation:** Instantly create a playlist of 50 tracks in the same mood/energy
-- **Add to Deezer:** (Mock) Button confirms addition—API ready for real Deezer export
+- **Add to Deezer:** (WIP) Button/UI and backend scaffolded—OAuth export landing next!
 
 ## Quickstart
 
@@ -30,6 +30,20 @@ App will be at http://localhost:5173
 
 ---
 
+## Screenshots
+_TODO: Add screenshots after latest polish—see `/frontend` for full UI code. To add your own: take a screenshot with a generated playlist shown, place it here!_
+
+## Current Flow
+- Search and select any real Spotify song (with your API keys in `.env`)
+- See live mood/energy analysis for your seed song (Spotify audio features)
+- Generate a **real**, mood-matched playlist of 50 songs via the Spotify recommendations API
+- Preview and browse the playlist, with cover art and song previews
+- **Add to Deezer:** (WIP) Button and UI scaffold in code; backend export flow will be live soon
+
+## Upcoming/Planned
+- 🔜 Deezer export: True OAuth authorization and push-to-Deezer integration. Ready for API keys in `.env`, UI/route scaffolded, final code landing next!
+- 📸 Add demo screenshots from browser—PRs welcome!
+
 ## API Credential Setup
 
 **You MUST fill in real API credentials in the `.env` file to search all tracks and to add playlists to Deezer!**
@@ -51,19 +65,3 @@ DEEZER_REDIRECT_URI=http://localhost:5050/callback/deezer
 You can leave these blank until launch; note features will not work until keys are filled.
 
 ---
-
-## Features
-
-- **Search all Spotify/Deezer tracks** (API credentials required!)
-- **Select any songs as playlist seeds**
-- **Generate 50-track smart playlist (mood/energy/vibe)**
-- **Add playlist to Deezer account via OAuth (real export, optional to fill keys)**
-
-## Screenshots
-_TODO: Add screenshots after latest polish—will show full, real API flow._
-
-## Extending (APIs)
-- Code is ready for real Spotify/Deezer integration. See backend code and API notes for more instructions.
-
----
-This MVP is ready for your keys, demo, or further feature work!
