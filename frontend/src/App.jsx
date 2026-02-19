@@ -41,7 +41,9 @@ function Playlist({ tracks }) {
           <div key={track.id} style={{ border: '1px solid #bbb', padding: 10, borderRadius: 7, width: 165, background: '#f8f8ff', boxShadow: '0 1px 2px #eee' }}>
             <div style={{ fontWeight: 'bold' }}>{track.title}</div>
             <div style={{ fontSize: 12, color: '#444' }}>{track.artist}</div>
-            <div style={{ fontSize: 10, color: '#999' }}>Mood: {track.mood}, Energy: {track.energy}</div>
+            <div style={{ fontSize: 10, color: '#999' }}>{track.album || ''}</div>
+            {track.cover && <img src={track.cover} alt="cover" style={{width: 48, borderRadius: 5, margin: '8px 0'}} />}
+            {track.preview_url && <audio controls src={track.preview_url} style={{width:'100%'}} />}
           </div>
         ))}
       </div>
@@ -58,6 +60,7 @@ function App() {
   const [deezerMsg, setDeezerMsg] = useState('');
   const [error, setError] = useState('');
   const [features, setFeatures] = useState(null);
+  const [playlistError, setPlaylistError] = useState('');
 
   async function fetchSongs() {
     try {
@@ -71,20 +74,42 @@ function App() {
 
   async function generatePlaylist() {
     setLoading(true);
+    setPlaylistError('');
     setPlaylist([]);
     setDeezerMsg('');
     setError('');
+    if (selected && selected.id && features) {
+      // Spotify (real recommendation)
+      try {
+        const r = await fetch('/spotify/recommend', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ seed_id: selected.id, target: {
+            energy: features.energy,
+            valence: features.valence,
+            danceability: features.danceability
+          } })
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || "Failed to get recommendations");
+        setPlaylist(data.playlist || []);
+      } catch (e) {
+        setPlaylistError(e.message);
+      }
+      setLoading(false);
+      return;
+    }
+    // fallback: legacy local
     try {
       const r = await fetch('/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ seed: selected })
       });
-      if (!r.ok) throw new Error('Failed to generate playlist');
       const data = await r.json();
       setPlaylist(data.playlist);
     } catch (e) {
-      setError('Could not generate playlist. Try again.');
+      setPlaylistError('Could not generate playlist. Try again.');
     }
     setLoading(false);
   }
@@ -135,6 +160,7 @@ function App() {
           </button>
         </div>
       )}
+      {playlistError && <div style={{color:'#c00',marginBottom:18}}>{playlistError}</div>}
       {!!playlist.length && (
         <>
           <Playlist tracks={playlist} />
