@@ -15,7 +15,8 @@ function SongList({ songs, selectSong, selectedId, filter }) {
               border: song.id === selectedId ? '2px solid #3f51b5' : '1px solid #ccc',
               padding: 12, borderRadius: 8, cursor: 'pointer', width: 180,
               background: song.id === selectedId ? '#e3eaff' : '#fff',
-              boxShadow: song.id === selectedId ? '0 0 12px #bbcafc' : '0 1px 5px #eee'
+              boxShadow: song.id === selectedId ? '0 0 12px #bbcafc' : '0 1px 5px #eee',
+              transition: 'box-shadow 0.2s, border 0.2s' 
             }}
             onClick={() => selectSong(song)}
           >
@@ -53,24 +54,35 @@ function App() {
   const [filter, setFilter] = useState('');
   const [loading, setLoading] = useState(false);
   const [deezerMsg, setDeezerMsg] = useState('');
+  const [error, setError] = useState('');
 
   async function fetchSongs() {
-    const r = await fetch('/search');
-    const data = await r.json();
-    setSongs(data.results);
+    try {
+      const r = await fetch('/search');
+      const data = await r.json();
+      setSongs(data.results);
+    } catch (e) {
+      setError('Failed to load songs. Please check your backend connection.');
+    }
   }
 
   async function generatePlaylist() {
     setLoading(true);
     setPlaylist([]);
     setDeezerMsg('');
-    const r = await fetch('/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ seed: selected })
-    });
-    const data = await r.json();
-    setPlaylist(data.playlist);
+    setError('');
+    try {
+      const r = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ seed: selected })
+      });
+      if (!r.ok) throw new Error('Failed to generate playlist');
+      const data = await r.json();
+      setPlaylist(data.playlist);
+    } catch (e) {
+      setError('Could not generate playlist. Try again.');
+    }
     setLoading(false);
   }
 
@@ -85,6 +97,7 @@ function App() {
   return (
     <div style={{ maxWidth: 1000, margin: '0 auto', padding: 32 }}>
       <h1 style={{ color: '#3f51b5' }}>Playlist Creator</h1>
+      {error && <div style={{background:'#ffeaea',color:'#c00',padding:'10px 20px',borderRadius:7,marginBottom:16}}>{error}</div>}
       <h3>Step 1: Pick a Seed Song</h3>
       <input
         value={filter}
