@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from spotify import spotify_search_api
+from spotify import spotify_search_api, get_audio_features
 
 app = Flask(__name__)
 CORS(app)
@@ -36,6 +36,11 @@ def generate_playlist():
         for i in range(1, 51)
     ]
     return jsonify({"playlist": playlist})
+
+@app.route('/spotify/features/<track_id>')
+def spotify_features(track_id):
+    result, status = get_audio_features(track_id)
+    return jsonify(result), status
 
 if __name__ == '__main__':
     app.run(debug=True, port=5050)
