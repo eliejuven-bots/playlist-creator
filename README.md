@@ -35,4 +35,12 @@ A web app to create custom playlists with songs from Spotify/Deezer based on vib
 - `/algo` - Playlist generation and recommendation logic
 
 ## Setup
-TBD
+
+### Backend (Python)
+1. Install dependencies: `pip install -r requirements.txt`
+2. Copy `.env.example` to `.env` and set API keys (Deezer, if available)
+3. Run: `cd backend && python app.py`
+
+### Frontend (coming soon)
+
+---

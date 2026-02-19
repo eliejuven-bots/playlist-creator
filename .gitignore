@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.env
+*.env
+
+# Node/Frontend
+node_modules/
+build/
+dist/
+
+# Mac/Linux
+.DS_Store
