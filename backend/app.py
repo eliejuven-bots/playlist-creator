@@ -1,26 +1,30 @@
-"""
-basic Flask API for playlist-creator backend
-"""
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route("/search", methods=["GET"])
+mock_catalog = [
+    {"id": 1, "title": "Song Alpha", "artist": "Artist X", "mood": "chill", "energy": 0.5},
+    {"id": 2, "title": "Song Beta", "artist": "Artist Y", "mood": "party", "energy": 0.8},
+    {"id": 3, "title": "Song Gamma", "artist": "Artist Z", "mood": "sad", "energy": 0.3}
+]
+
+@app.route('/search', methods=['GET'])
 def search_tracks():
-    # TODO: Implement search via Spotify/Deezer API
-    return jsonify({"results": []})
+    return jsonify({"results": mock_catalog})
 
-@app.route("/generate", methods=["POST"])
+@app.route('/generate', methods=['POST'])
 def generate_playlist():
-    seed_tracks = request.json.get("seeds", [])
-    # TODO: Call recommendation algo and return playlist
-    return jsonify({"playlist": []})
+    # Always returns 50 mock tracks with the same mood as seed
+    seed = request.json.get("seed", {})
+    mood = seed.get("mood") or "chill"
+    energy = seed.get("energy") or 0.5
+    playlist = [
+        {"id": i, "title": f"Generated Song {i}", "artist": f"Similar Artist {i}", "mood": mood, "energy": energy}
+        for i in range(1, 51)
+    ]
+    return jsonify({"playlist": playlist})
 
-@app.route("/deezer/add", methods=["POST"])
-def add_to_deezer():
-    playlist = request.json.get("playlist", [])
-    # TODO: Implement Deezer playlist creation/auth
-    return jsonify({"status": "success"})
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True, port=5050)
