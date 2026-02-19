@@ -42,5 +42,15 @@ def spotify_features(track_id):
     result, status = get_audio_features(track_id)
     return jsonify(result), status
 
+@app.route('/spotify/recommend', methods=['POST'])
+def recommend_endpoint():
+    data = request.json or {}
+    seed_id = data.get('seed_id')
+    target = data.get('target') or {}
+    if not seed_id:
+        return jsonify({'error': 'seed_id required'}), 400
+    res, status = spotify_recommend(seed_id, target_vals=target, n=50)
+    return jsonify(res), status
+
 if __name__ == '__main__':
     app.run(debug=True, port=5050)
