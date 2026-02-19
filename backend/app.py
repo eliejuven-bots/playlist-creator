@@ -1,25 +1,25 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from spotify import spotify_search_api
 
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/spotify/search')
+def spotify_search():
+    q = request.args.get('q', '').strip()
+    if not q:
+        return jsonify({"error": "Missing 'q' parameter."}), 400
+    result, status = spotify_search_api(q)
+    return jsonify(result), status
+
+# (legacy) mock endpoints below; will be phased out
 mock_catalog = [
     {"id": 1, "title": "Lost in the Echo", "artist": "Linkin Park", "mood": "energetic", "energy": 0.9},
     {"id": 2, "title": "Blinding Lights", "artist": "The Weeknd", "mood": "upbeat", "energy": 0.85},
     {"id": 3, "title": "Someone Like You", "artist": "Adele", "mood": "sad", "energy": 0.25},
     {"id": 4, "title": "Shape of You", "artist": "Ed Sheeran", "mood": "romantic", "energy": 0.6},
-    {"id": 5, "title": "Can’t Stop the Feeling!", "artist": "Justin Timberlake", "mood": "happy", "energy": 0.8},
-    {"id": 6, "title": "Take Five", "artist": "The Dave Brubeck Quartet", "mood": "chill", "energy": 0.4},
-    {"id": 7, "title": "Bad Guy", "artist": "Billie Eilish", "mood": "funky", "energy": 0.7},
-    {"id": 8, "title": "Moonlight Sonata", "artist": "Beethoven", "mood": "melancholic", "energy": 0.15},
-    {"id": 9, "title": "Sandstorm", "artist": "Darude", "mood": "epic", "energy": 1.0},
-    {"id": 10, "title": "Happy", "artist": "Pharrell Williams", "mood": "joyful", "energy": 0.95},
-    {"id": 11, "title": "Africa", "artist": "Toto", "mood": "nostalgic", "energy": 0.6},
-    {"id": 12, "title": "Counting Stars", "artist": "OneRepublic", "mood": "inspirational", "energy": 0.85},
-    {"id": 13, "title": "Smells Like Teen Spirit", "artist": "Nirvana", "mood": "rebellious", "energy": 0.9},
-    {"id": 14, "title": "Believer", "artist": "Imagine Dragons", "mood": "powerful", "energy": 0.8},
-    {"id": 15, "title": "Summertime Sadness", "artist": "Lana Del Rey", "mood": "moody", "energy": 0.4}
+    {"id": 5, "title": "Can’t Stop the Feeling!", "artist": "Justin Timberlake", "mood": "happy", "energy": 0.8}
 ]
 
 @app.route('/search', methods=['GET'])
