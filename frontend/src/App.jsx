@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SpotifySearch from "./SpotifySearch";
+import FeatureDisplay from "./FeatureDisplay";
 
 function SongList({ songs, selectSong, selectedId, filter }) {
   const filtered = songs.filter(
@@ -56,6 +57,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [deezerMsg, setDeezerMsg] = useState('');
   const [error, setError] = useState('');
+  const [features, setFeatures] = useState(null);
 
   async function fetchSongs() {
     try {
@@ -100,7 +102,23 @@ function App() {
       <h1 style={{ color: '#3f51b5' }}>Playlist Creator</h1>
       {error && <div style={{background:'#ffeaea',color:'#c00',padding:'10px 20px',borderRadius:7,marginBottom:16}}>{error}</div>}
       <h3>Step 1: Search Spotify and pick a Seed Song</h3>
-      <SpotifySearch onSelect={song => setSelected(song)} />
+      <SpotifySearch onSelect={async song => {
+        setSelected(song);
+        setFeatures(null);
+        if (song && song.id) {
+          setFeatures(null);
+          try {
+            const r = await fetch(`/spotify/features/${song.id}`);
+            const data = await r.json();
+            if (r.status !== 200) throw new Error(data.error || "No features");
+            setFeatures(data);
+          } catch (e) {
+            setFeatures({ error: e.message });
+          }
+        }
+      }} />
+      {features && !features.error && <FeatureDisplay features={features} />}
+      {features && features.error && <div style={{color:'#c00',marginBottom:18}}>Spotify Audio Features: {features.error}</div>}
       <div style={{margin:'32px 0',fontSize:14,color:'#888',fontWeight:400}}>OR try the legacy local catalog below (for demo/debug):</div>
       <input
         value={filter}
