@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SpotifySearch from "./SpotifySearch";
 
 function SongList({ songs, selectSong, selectedId, filter }) {
   const filtered = songs.filter(
@@ -98,11 +99,13 @@ function App() {
     <div style={{ maxWidth: 1000, margin: '0 auto', padding: 32 }}>
       <h1 style={{ color: '#3f51b5' }}>Playlist Creator</h1>
       {error && <div style={{background:'#ffeaea',color:'#c00',padding:'10px 20px',borderRadius:7,marginBottom:16}}>{error}</div>}
-      <h3>Step 1: Pick a Seed Song</h3>
+      <h3>Step 1: Search Spotify and pick a Seed Song</h3>
+      <SpotifySearch onSelect={song => setSelected(song)} />
+      <div style={{margin:'32px 0',fontSize:14,color:'#888',fontWeight:400}}>OR try the legacy local catalog below (for demo/debug):</div>
       <input
         value={filter}
         onChange={e => setFilter(e.target.value)}
-        placeholder="Search by song or artist..."
+        placeholder="Search by song or artist in local catalog..."
         style={{padding:'9px 12px',marginBottom:18,fontSize:16,borderRadius:8,border:'1px solid #ccc',width:'100%',maxWidth:360}}
       />
       <SongList songs={songs} selectedId={selected && selected.id} selectSong={setSelected} filter={filter} />
