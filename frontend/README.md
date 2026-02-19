@@ -1,9 +1,8 @@
 # Playlist Creator Frontend
 
-The UI will enable:
-- Searching songs across Spotify/Deezer
-- Selecting multiple seed tracks
-- Viewing/previewing generated playlist and audio features
-- Button to add final playlist to Deezer account
-
-TBD: Choice of framework (React, Vue, etc.)
+- React app (Vite setup, no create-vite)
+- Features: 
+  - Choose song (mock catalog)
+  - Generate mood-based playlist
+  - Add to Deezer (mock)
+- Quick run: `npm install && npm run dev`
