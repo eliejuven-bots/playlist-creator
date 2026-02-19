@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SpotifySearch from "./SpotifySearch";
 import FeatureDisplay from "./FeatureDisplay";
+import Spinner from "./Spinner";
 
 function SongList({ songs, selectSong, selectedId, filter }) {
   const filtered = songs.filter(
@@ -161,7 +162,8 @@ function App() {
         </div>
       )}
       {playlistError && <div style={{color:'#c00',marginBottom:18}}>{playlistError}</div>}
-      {!!playlist.length && (
+      {loading && <Spinner />}
+      {!!playlist.length && !loading && (
         <>
           <Playlist tracks={playlist} />
           <div style={{ marginTop: 20 }}>
