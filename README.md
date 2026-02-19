@@ -11,15 +11,16 @@ A web app to create custom playlists with songs from Spotify/Deezer based on vib
 
 ## Quickstart
 
-### Backend
+### 1. Backend Setup
 ```bash
 cd backend
 pip install -r ../requirements.txt
+cp ../.env.example ../.env  # Fill in your Spotify/Deezer API keys as needed
 python app.py
 ```
 Frontend expects backend on localhost:5050.
 
-### Frontend
+### 2. Frontend Setup
 ```bash
 cd frontend
 npm install
@@ -27,12 +28,42 @@ npm run dev
 ```
 App will be at http://localhost:5173
 
-## Screenshots
-_TODO: Add screenshots after latest polish—will show MVP end-to-end._
+---
 
-## Extending (APIs)
-- **To connect Spotify API:** Implement real search and get audio features
-- **To connect real Deezer API:** Replace the mock in /deezer endpoint and UI
+## API Credential Setup
+
+**You MUST fill in real API credentials in the `.env` file to search all tracks and to add playlists to Deezer!**
+
+- **Spotify:** Create an app at https://developer.spotify.com/dashboard/applications and use your Client ID/Client Secret/Redirect URI. Enables searching and feature extraction.
+- **Deezer:** Register at https://developers.deezer.com/myapps for App ID/Secret/Redirect URI. Enables playlist export.
+
+Example:
+```
+SPOTIFY_CLIENT_ID=your_client_id
+SPOTIFY_CLIENT_SECRET=your_secret
+SPOTIFY_REDIRECT_URI=http://localhost:5050/callback/spotify
+
+DEEZER_APP_ID=your_app_id
+DEEZER_APP_SECRET=your_secret
+DEEZER_REDIRECT_URI=http://localhost:5050/callback/deezer
+```
+
+You can leave these blank until launch; note features will not work until keys are filled.
 
 ---
-This MVP is ready to demo or extend!
+
+## Features
+
+- **Search all Spotify/Deezer tracks** (API credentials required!)
+- **Select any songs as playlist seeds**
+- **Generate 50-track smart playlist (mood/energy/vibe)**
+- **Add playlist to Deezer account via OAuth (real export, optional to fill keys)**
+
+## Screenshots
+_TODO: Add screenshots after latest polish—will show full, real API flow._
+
+## Extending (APIs)
+- Code is ready for real Spotify/Deezer integration. See backend code and API notes for more instructions.
+
+---
+This MVP is ready for your keys, demo, or further feature work!
